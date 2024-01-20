@@ -9,6 +9,8 @@ def index(request):
     user = "pouya"
     products_numb = 7
     products = Product.objects.all().order_by('id')[:4]
+    suits=Product.objects.filter(brand__title="Pouya")
+    print(suits)
     return render(request, "products/home.html",{
         "name":user,
         "product_numb": products_numb,

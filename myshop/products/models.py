@@ -2,27 +2,46 @@ from django.db import models
 
 # Create your models here.
 
+class Address(models.Model):
+    street=models.CharField(max_length=50)
+    zipcode=models.PositiveIntegerField()
+    city=models.CharField(max_length=50)
+    country=models.CharField(max_length=20)
+
+    def __str__(self):
+        return f"{self.country}"
+
+class Brand(models.Model):
+    title = models.CharField(max_length= 70)
+    logo = models.ImageField()
+    address=models.OneToOneField(Address,on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return f"{self.title}"
+
+
+
 class Shirt(models.Model):
     title = models.CharField(max_length= 70)
+    brand=models.ForeignKey(Brand,on_delete=models.CASCADE, null=True)
     price = models.PositiveIntegerField()
-    brand = models.CharField(max_length= 50, null=True)
     description = models.TextField(blank=True)
     is_bestseller = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.title}"
 
-class Brand(models.Model):
-    title = models.CharField(max_length= 70)
-    logo = models.ImageField()
 
+class Category(models.Model):
+    title=models.CharField(max_length=20)
+    desciption=models.CharField( max_length=50)
     def __str__(self):
         return f"{self.title}"
 
 class Product(models.Model):
     title = models.CharField(max_length= 70)
     description = models.TextField()
-    category = models.CharField(max_length= 50)
+    category = models.ManyToManyField(Category)
     image = models.ImageField(blank= True, upload_to='product-img')
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=True)
     price = models.PositiveIntegerField()
