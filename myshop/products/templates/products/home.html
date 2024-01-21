@@ -37,9 +37,14 @@
                 <div style="padding:20px 25px">
                     <h3>{{product.title}}</h3>
                     <p>{{product.description}}</p>
-                    <p>{{product.brand.title}}
+                    <p>{{product.brand.title}}</p>
                     <img src={{product.brand.logo.url}} width=100px></img>
                     <a href="">View Product</a>
+                    {% if product.brand %}
+                        <p>{{product.brand.address.city}}</p>
+                    {%endif%}
+
+                                        
                 </div>
             </div>
         {% endfor %}

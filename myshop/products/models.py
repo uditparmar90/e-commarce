@@ -9,7 +9,7 @@ class Address(models.Model):
     country=models.CharField(max_length=20)
 
     def __str__(self):
-        return f"{self.country}"
+        return f"{self.city}-{self.country}"
 
 class Brand(models.Model):
     title = models.CharField(max_length= 70)
@@ -18,7 +18,6 @@ class Brand(models.Model):
 
     def __str__(self):
         return f"{self.title}"
-
 
 
 class Shirt(models.Model):
@@ -34,19 +33,20 @@ class Shirt(models.Model):
 
 class Category(models.Model):
     title=models.CharField(max_length=20)
-    desciption=models.CharField( max_length=50)
+    description=models.TextField( max_length=50, null=True)
     def __str__(self):
         return f"{self.title}"
 
 class Product(models.Model):
     title = models.CharField(max_length= 70)
     description = models.TextField()
-    category = models.ManyToManyField(Category)
+    cat = models.ManyToManyField(Category)
     image = models.ImageField(blank= True, upload_to='product-img')
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=True)
     price = models.PositiveIntegerField()
     slug = models.SlugField(blank=True)
     is_bestseller = models.BooleanField(default=False)
+    suggestion=models.ManyToManyField('self')
 
     def __str__(self):
         return f"{self.title}"
@@ -55,3 +55,6 @@ class Product(models.Model):
         super().save(*args, **kwargs)
         self.slug = self.id
         super().save(*args, **kwargs)
+
+
+
