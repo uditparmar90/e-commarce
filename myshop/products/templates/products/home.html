@@ -39,7 +39,7 @@
                     <p>{{product.description}}</p>
                     <p>{{product.brand.title}}</p>
                     <img src={{product.brand.logo.url}} width=100px></img>
-                    <a href="">View Product</a>
+                    <a href={% url "product_page" product.brand.title product.slug%}>View Product</a>
                     {% if product.brand %}
                         <p>{{product.brand.address.city}}</p>
                     {%endif%}

@@ -40,12 +40,15 @@ class Category(models.Model):
 class Product(models.Model):
     title = models.CharField(max_length= 70)
     description = models.TextField()
+    # many to many relationship
     cat = models.ManyToManyField(Category)
     image = models.ImageField(blank= True, upload_to='product-img')
+    # one to one ralationship
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=True)
     price = models.PositiveIntegerField()
     slug = models.SlugField(blank=True)
     is_bestseller = models.BooleanField(default=False)
+    # -------------manay to manny ralationship within model------------ex-product suggestion within a particular roduct
     suggestion=models.ManyToManyField('self')
 
     def __str__(self):
