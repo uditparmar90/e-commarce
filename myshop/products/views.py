@@ -34,11 +34,11 @@ def product_page(request,product_brand,product_slug):
     if request.method=="GET":
         return render(request,"products/product_detail_page.html",{"product":product,"form":form})
     else:
-        form=FeedbackForm(request.POST)
-        if form.is_valid():
-            # print(form.cleaned_data)
+        form1=FeedbackForm(request.POST)
+        form=FeedbackForm()
+        if form1.is_valid():
+            print(form1.cleaned_data)
             messages.success(request,"Thanks for your review!")
-
         return render(request,"products/product_detail_page.html",{"product":product,"form":form})
         
 
