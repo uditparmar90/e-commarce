@@ -37,24 +37,16 @@
                 {% comment %} <input type="text" placeholder="write your review" name="review">
                 <button style="width:auto;padding:10px;display:flex!important;margin:20px 0px";>Submit</button> {% endcomment %}
 
-                {% if messages%}
-                {% for msg in messages %}
-                <p style="color:#22BB33;">{{msg}}</p>
-                {% endfor %}
+                {% for field in form %}<br>
+                {{field.label_tag}}<br>
+                {{field}}<br>
+                {% if field.help_text %}
+                {{field.help_text}}
                 {% endif %}
-               
-                {% comment %} {{form}}  {% endcomment %}
-                {{form.name.label_tag}}<br>
-                {%for error in form.name.errors%}
+                {%for error in field.errors%}
                     <p style="color:red;">{{error}}</p>
-                {%endfor%}
-                {{form.name}}<br>
-                
-                {{form.email.label_tag}}<br>
-                {%for error in form.email.errors%}
-                    <p style="color:red;">{{error}}</p>
+                {% endfor %}<br>
                 {% endfor %}
-                {{form.email}}<br>
                 <button type="Submit">Submit</button>
                                 
             </form>

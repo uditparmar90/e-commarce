@@ -27,19 +27,24 @@ def product_cat(request, product):
     else:
         return HttpResponse("The page you are looking for doesn't exist.")
 
-def product_page(request,product_brand,product_slug):
-    product=Product.objects.get(slug=product_slug)
+def product_page(request, product_brand, product_slug):
+    # Get the product object based on the slug
+    product = Product.objects.get(slug=product_slug)
 
-    form=FeedbackForm()
-    if request.method=="GET":
-        return render(request,"products/product_detail_page.html",{"product":product,"form":form})
+    if request.method == "GET":
+        # Instantiate the form with no data when the page loads
+        form = FeedbackForm()
     else:
-        form1=FeedbackForm(request.POST)
-        form=FeedbackForm()
-        if form1.is_valid():
-            print(form1.cleaned_data)
-            messages.success(request,"Thanks for your review!")
-        return render(request,"products/product_detail_page.html",{"product":product,"form":form})
-        
+        # Instantiate the form with request data if the form is submitted
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            # If the form is valid, process the data
+            print(form.cleaned_data)
+            # Here you can save the form data or do whatever you want
+            messages.success(request, "Thanks for your review!")
+            # Redirect after form submission to prevent form resubmission on page refresh
+            # return redirect('product_detail', product_brand=product_brand, product_slug=product_slug)
+            form = FeedbackForm()
 
-    
+    # Render the product detail page with the product and the form
+    return render(request, "products/product_detail_page.html", {"product": product, "form": form})
