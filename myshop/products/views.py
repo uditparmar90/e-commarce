@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Product
+from .models import Product,Feedback
 from .forms import FeedbackForm
 from django.contrib import messages
 
@@ -34,17 +34,24 @@ def product_page(request, product_brand, product_slug):
     if request.method == "GET":
         # Instantiate the form with no data when the page loads
         form = FeedbackForm()
+        msg=""
     else:
         # Instantiate the form with request data if the form is submitted
         form = FeedbackForm(request.POST)
         if form.is_valid():
+            feedback=Feedback(
+                name=form.cleaned_data["name"],
+                rating=form.cleaned_data["rating"],
+                product=product,
+                text=form.cleaned_data["comment"],
+            )
+            feedback.save()
             # If the form is valid, process the data
             print(form.cleaned_data)
             # Here you can save the form data or do whatever you want
-            messages.success(request, "Thanks for your review!")
-            # Redirect after form submission to prevent form resubmission on page refresh
-            # return redirect('product_detail', product_brand=product_brand, product_slug=product_slug)
-            form = FeedbackForm()
+            # messages.success(request, "Thanks for your review!")
+            msg ="Thanks for your review!"
+            
 
     # Render the product detail page with the product and the form
-    return render(request, "products/product_detail_page.html", {"product": product, "form": form})
+    return render(request, "products/product_detail_page.html", {"product": product, "form": form,'success_message': msg})

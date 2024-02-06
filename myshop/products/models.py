@@ -7,7 +7,6 @@ class Address(models.Model):
     zipcode=models.PositiveIntegerField()
     city=models.CharField(max_length=50)
     country=models.CharField(max_length=20)
-
     def __str__(self):
         return f"{self.city}-{self.country}"
 
@@ -15,7 +14,6 @@ class Brand(models.Model):
     title = models.CharField(max_length= 70)
     logo = models.ImageField()
     address=models.OneToOneField(Address,on_delete=models.CASCADE, null=True)
-
     def __str__(self):
         return f"{self.title}"
 
@@ -26,7 +24,6 @@ class Shirt(models.Model):
     price = models.PositiveIntegerField()
     description = models.TextField(blank=True)
     is_bestseller = models.BooleanField(default=False)
-
     def __str__(self):
         return f"{self.title}"
 
@@ -50,14 +47,21 @@ class Product(models.Model):
     is_bestseller = models.BooleanField(default=False)
     # -------------manay to manny ralationship within model------------ex-product suggestion within a particular roduct
     suggestion=models.ManyToManyField('self')
-
     def __str__(self):
         return f"{self.title}"
-
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         self.slug = self.id
         super().save(*args, **kwargs)
+
+class Feedback(models.Model):
+    name=models.CharField(max_length=50)
+    rating=models.PositiveIntegerField()
+    product=models.ForeignKey(Product,on_delete=models.CASCADE)
+    text=models.TextField()
+    def __str__(self):
+        return f"{self.name} - Rating {self.rating}"
+
 
 
 

@@ -36,7 +36,11 @@
                 {% csrf_token %}
                 {% comment %} <input type="text" placeholder="write your review" name="review">
                 <button style="width:auto;padding:10px;display:flex!important;margin:20px 0px";>Submit</button> {% endcomment %}
-
+                {% if success_message %}
+                <div class="alert alert-success" style="color:green;">
+                    {{ success_message }}
+                </div>
+                {% endif %}
                 {% for field in form %}<br>
                 {{field.label_tag}}<br>
                 {{field}}<br>
