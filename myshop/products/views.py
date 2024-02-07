@@ -30,11 +30,14 @@ def product_cat(request, product):
 def product_page(request, product_brand, product_slug):
     # Get the product object based on the slug
     product = Product.objects.get(slug=product_slug)
-
+    feedback=Feedback.objects.filter(product=product)
     if request.method == "GET":
         # Instantiate the form with no data when the page loads
         form = FeedbackForm()
+        print(feedback)
+        
         msg=""
+        return render(request,"products/product_detail_page.html",{"product": product, "form": form,'feedbackData': feedback})
     else:
         # Instantiate the form with request data if the form is submitted
         form = FeedbackForm(request.POST)
@@ -48,7 +51,6 @@ def product_page(request, product_brand, product_slug):
             feedback.save()
             # If the form is valid, process the data
             print(form.cleaned_data)
-            # Here you can save the form data or do whatever you want
             # messages.success(request, "Thanks for your review!")
             msg ="Thanks for your review!"
             
