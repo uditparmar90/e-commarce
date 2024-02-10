@@ -1,3 +1,16 @@
+section input, section textarea{
+    width: 100%;
+    border:1px solid rgba(0, 0, 0, 0.192);
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+section input:hover, 
+section textarea:hover,
+section input:focus,
+section textarea:focus {
+    border: 2px solid rgba(0, 0, 0, 0.192) !important;
+}
+
 body{
     font-family: Arial, Helvetica, sans-serif;
     margin: 0;
