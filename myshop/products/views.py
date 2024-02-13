@@ -1,22 +1,23 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.views import View
 from .models import Product,Feedback
 from .forms import FeedbackForm
-from django.contrib import messages
 
-# Create your views here.
+class IndexView(View):
+    def get(self,request):
+        user = "pouya"
+        products_numb = 7
+        products = Product.objects.all().order_by('id')[:4]
+        # suits=Product.objects.filter(brand__title="Pouya")
+        return render(request, "products/home.html",{
+            "name":user,
+            "product_numb": products_numb,
+            "products": products,
+        })
 
-
-def index(request):
-    user = "pouya"
-    products_numb = 7
-    products = Product.objects.all().order_by('id')[:4]
-    # suits=Product.objects.filter(brand__title="Pouya")
-    return render(request, "products/home.html",{
-        "name":user,
-        "product_numb": products_numb,
-        "products": products,
-    })
+    
+    
 
 def signup(request):
     return render(request, "products/signup.html")
@@ -27,19 +28,23 @@ def product_cat(request, product):
     else:
         return HttpResponse("The page you are looking for doesn't exist.")
 
-def product_page(request, product_brand, product_slug):
-    # Get the product object based on the slug
-    product = Product.objects.get(slug=product_slug)
-    feedback=Feedback.objects.filter(product=product)
-    if request.method == "GET":
+
+class ProductView(View):
+    def get(self,request, product_brand, product_slug):
+        product = Product.objects.get(slug=product_slug)
+        feedback=Feedback.objects.filter(product=product)
+        if request.method == "GET":
         # Instantiate the form with no data when the page loads
-        form = FeedbackForm()
-        print(feedback)
+            form = FeedbackForm()
+            print(feedback)
         
         msg=""
         return render(request,"products/product_detail_page.html",{"product": product, "form": form,'feedbackData': feedback})
-    else:
-        # Instantiate the form with request data if the form is submitted
+    
+
+    def post(self,request, product_brand, product_slug):
+        product = Product.objects.get(slug=product_slug)
+        feedback=Feedback.objects.filter(product=product)
         form = FeedbackForm(request.POST)
         if form.is_valid():
             feedback=Feedback(
@@ -53,7 +58,6 @@ def product_page(request, product_brand, product_slug):
             print(form.cleaned_data)
             # messages.success(request, "Thanks for your review!")
             msg ="Thanks for your review!"
-            
+            return render(request, "products/product_detail_page.html", {"product": product, "form": form,'success_message': msg})
 
-    # Render the product detail page with the product and the form
-    return render(request, "products/product_detail_page.html", {"product": product, "form": form,'success_message': msg})
+        
